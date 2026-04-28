@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JJ Inmobiliaria — Plantillas de contenido</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; }
+
+  header { background: #fff; border-bottom: 1px solid #e5e3dc; padding: 1rem 2rem; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 17px; font-weight: 600; color: #1a1a1a; }
+  header span { font-size: 13px; color: #888; }
+
+  .tabs { display: flex; gap: 0; background: #fff; border-bottom: 1px solid #e5e3dc; padding: 0 2rem; }
+  .tab { padding: 14px 20px; font-size: 14px; font-weight: 500; color: #888; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab:hover { color: #1a1a1a; }
+  .tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+  .page { display: none; padding: 2rem; max-width: 760px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .section { margin-bottom: 1.75rem; }
+  .section-label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+
+  .card { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 1rem 1.25rem; }
+
+  .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .field label { font-size: 12px; color: #888; display: block; margin-bottom: 4px; }
+  .field input, .field textarea { width: 100%; font-size: 14px; font-family: inherit; color: #1a1a1a; background: #f5f4f0; border: 1px solid #e5e3dc; border-radius: 8px; padding: 8px 10px; outline: none; transition: border-color 0.15s; resize: none; }
+  .field input:focus, .field textarea:focus { border-color: #aaa; background: #fff; }
+
+  .hook-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 8px; margin-bottom: 10px; }
+  .hook-card { background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 0.75rem 1rem; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+  .hook-card:hover { border-color: #bbb; }
+  .hook-card.active { border: 2px solid #1a1a1a; background: #f5f4f0; }
+  .hook-card-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+  .hook-card-sub { font-size: 12px; color: #888; line-height: 1.4; }
+
+  .output { background: #f5f4f0; border-radius: 8px; padding: 0.85rem 1rem; font-size: 14px; color: #1a1a1a; line-height: 1.7; min-height: 52px; }
+  .output-placeholder { color: #bbb; font-size: 13px; }
+
+  .checklist { }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f0ede6; }
+  .check-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .check-item input[type=checkbox] { margin-top: 3px; flex-shrink: 0; width: 15px; height: 15px; accent-color: #1a1a1a; cursor: pointer; }
+  .check-text { font-size: 14px; color: #1a1a1a; line-height: 1.4; }
+  .check-sub { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .tp-table { width: 100%; }
+  .tp-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0ede6; gap: 12px; }
+  .tp-row:last-child { border-bottom: none; }
+  .tp-label { font-size: 12px; color: #888; flex-shrink: 0; }
+  .tp-value { font-size: 13px; font-weight: 500; color: #1a1a1a; text-align: right; }
+  .tp-empty { color: #ccc; font-weight: 400; font-style: italic; }
+
+  .preview-block { }
+  .preview-part { margin-bottom: 12px; }
+  .preview-part:last-child { margin-bottom: 0; }
+  .preview-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .preview-tag.amber { color: #b07010; }
+  .preview-tag.blue { color: #1a5fa8; }
+  .preview-tag.green { color: #2a6e2a; }
+  .preview-text { font-size: 14px; color: #1a1a1a; line-height: 1.75; }
+
+  .btn { width: 100%; padding: 11px; font-size: 14px; font-weight: 500; margin-top: 0.75rem; cursor: pointer; border-radius: 8px; background: #1a1a1a; border: none; color: #fff; transition: opacity 0.15s; }
+  .btn:hover { opacity: 0.85; }
+  .btn-secondary { background: #f5f4f0; color: #1a1a1a; border: 1px solid #e5e3dc; }
+  .btn-secondary:hover { background: #ece9e1; opacity: 1; }
+
+  .divider { border: none; border-top: 1px solid #e5e3dc; margin: 1.5rem 0; }
+
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge-tiktok { background: #e8f4fd; color: #1a5fa8; }
+  .badge-insta { background: #fde8f4; color: #a81a5f; }
+  .badge-hook { background: #fdf3e8; color: #a86010; }
+  .badge-ok { background: #e8fde8; color: #1a6e1a; }
+
+  .tip { background: #f5f4f0; border-left: 3px solid #ccc; padding: 0.65rem 0.85rem; border-radius: 0; font-size: 13px; color: #555; line-height: 1.5; margin-top: 8px; }
+
+  @media (max-width: 600px) {
+    .page { padding: 1rem; }
+    header { padding: 1rem; }
+    .tabs { padding: 0 1rem; overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>JJ Inmobiliaria</h1>
+    <span>Plantillas de contenido — Marketing</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('tiktok', this)">TikTok</button>
+  <button class="tab" onclick="showTab('insta', this)">Instagram Reels</button>
+</div>
+
+<!-- TIKTOK -->
+<div class="page active" id="page-tiktok">
+
+  <div class="section">
+    <div class="section-label">Datos de la vivienda</div>
+    <div class="card">
+      <div class="fields">
+        <div class="field">
+          <label>Tipo</label>
+          <input type="text" id="tt-tipo" placeholder="Ático, piso, casa..." oninput="ttUpdate()" />
+        </div>
+        <div class="field">
+          <label>Zona</label>
+          <input type="text" id="tt-zona" placeholder="Rafelbunyol, Valencia..." oninput="ttUpdate()" />
+        </div>
+        <div class="field">
+          <label>Precio</label>
+          <input type="text" id="tt-precio" placeholder="340.000€" oninput="ttUpdate()" />
+        </div>
+        <div class="field">
+          <label>Detalle estrella</label>
+          <input type="text" id="tt-detalle" placeholder="Terraza, reformado, vistas..." oninput="ttUpdate()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Tipo de hook — elige uno <span class="badge badge-hook">Primeros 3 seg</span></div>
+    <div class="hook-grid">
+      <button class="hook-card" onclick="ttSelectHook(this,'comercial')">
+        <div class="hook-card-title">Comercial a cámara</div>
+        <div class="hook-card-sub">Cara + frase de gancho en exterior</div>
+      </button>
+      <button class="hook-card" onclick="ttSelectHook(this,'objeto')">
+        <div class="hook-card-title">Objeto / detalle</div>
+        <div class="hook-card-sub">Llaves, precio en papel, metro...</div>
+      </button>
+      <button class="hook-card" onclick="ttSelectHook(this,'contraste')">
+        <div class="hook-card-title">Contraste</div>
+        <div class="hook-card-sub">Exterior → corte seco al interior</div>
+      </button>
+      <button class="hook-card" onclick="ttSelectHook(this,'movimiento')">
+        <div class="hook-card-title">Movimiento</div>
+        <div class="hook-card-sub">Zoom detalle → zoom out rápido</div>
+      </button>
+    </div>
+    <div class="output" id="tt-hook-output">
+      <span class="output-placeholder">Selecciona un tipo de hook</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Textos en pantalla — para edición</div>
+    <div class="card">
+      <div class="tp-table">
+        <div class="tp-row">
+          <span class="tp-label">Inicio del tour</span>
+          <span class="tp-value" id="tt-tp1"><span class="tp-empty">rellena tipo y zona</span></span>
+        </div>
+        <div class="tp-row">
+          <span class="tp-label">Mitad del vídeo</span>
+          <span class="tp-value" id="tt-tp2"><span class="tp-empty">rellena detalle estrella</span></span>
+        </div>
+        <div class="tp-row">
+          <span class="tp-label">Cierre</span>
+          <span class="tp-value" id="tt-tp3"><span class="tp-empty">rellena precio y zona</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Checklist antes de grabar</div>
+    <div class="card checklist">
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Hook decidido y ensayado</div>
+          <div class="check-sub">El comercial lo lee 2 veces antes de grabar</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Grabar siempre en vertical</div>
+          <div class="check-sub">Sin mezclar orientaciones</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Hook grabado en el exterior</div>
+          <div class="check-sub">Nunca dentro del piso</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Textos en pantalla anotados</div>
+          <div class="check-sub">Pasárselos a edición antes de montar</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Tour grabado con ritmo continuo</div>
+          <div class="check-sub">Movimiento constante, sin paradas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- INSTAGRAM -->
+<div class="page" id="page-insta">
+
+  <div class="section">
+    <div class="section-label">Datos de la vivienda</div>
+    <div class="card">
+      <div class="fields">
+        <div class="field">
+          <label>Tipo</label>
+          <input type="text" id="ig-tipo" placeholder="Ático, piso, casa..." oninput="igUpdate()" />
+        </div>
+        <div class="field">
+          <label>Zona</label>
+          <input type="text" id="ig-zona" placeholder="Rafelbunyol, Valencia..." oninput="igUpdate()" />
+        </div>
+        <div class="field">
+          <label>Precio</label>
+          <input type="text" id="ig-precio" placeholder="340.000€" oninput="igUpdate()" />
+        </div>
+        <div class="field">
+          <label>Detalle estrella</label>
+          <input type="text" id="ig-detalle" placeholder="Terraza, reformado, vistas..." oninput="igUpdate()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Hook de apertura <span class="badge badge-hook">Primeros 5 seg</span></div>
+    <div class="hook-grid">
+      <button class="hook-card" onclick="igSelectHook(this,'precio')">
+        <div class="hook-card-title">Por precio</div>
+        <div class="hook-card-sub">El precio como argumento principal</div>
+      </button>
+      <button class="hook-card" onclick="igSelectHook(this,'opinion')">
+        <div class="hook-card-title">Opinión personal</div>
+        <div class="hook-card-sub">El comercial se implica emocionalmente</div>
+      </button>
+      <button class="hook-card" onclick="igSelectHook(this,'sorpresa')">
+        <div class="hook-card-title">Elemento sorpresa</div>
+        <div class="hook-card-sub">Algo inesperado de la vivienda</div>
+      </button>
+      <button class="hook-card" onclick="igSelectHook(this,'urgencia')">
+        <div class="hook-card-title">Urgencia</div>
+        <div class="hook-card-sub">Visitas, reservas, tiempo limitado</div>
+      </button>
+    </div>
+    <div class="output" id="ig-hook-output">
+      <span class="output-placeholder">Selecciona un tipo de hook</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Cuerpo del guión</div>
+    <div class="card">
+      <div class="fields" style="grid-template-columns: 1fr;">
+        <div class="field">
+          <label>Descripción emocional (2-3 frases)</label>
+          <textarea id="ig-emocion" rows="3" placeholder="Nada más entrar, sientes esa luz. Una casa mimada y cuidada en cada detalle. Aquí no necesitas pensar en reformas, solo mudarte y empezar a vivir." oninput="igUpdate()"></textarea>
+        </div>
+        <div class="field">
+          <label>Características clave</label>
+          <textarea id="ig-caract" rows="2" placeholder="3 habitaciones, 2 baños completos, cocina abierta, terraza espectacular, garaje..." oninput="igUpdate()"></textarea>
+        </div>
+        <div class="field">
+          <label>Extras destacables</label>
+          <input type="text" id="ig-extras" placeholder="Aire acondicionado, posibilidad de ampliar..." oninput="igUpdate()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Cierre</div>
+    <div class="hook-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px,1fr));">
+      <button class="hook-card" onclick="igSelectCierre(this,'zona')">
+        <div class="hook-card-title">Precio + zona</div>
+        <div class="hook-card-sub">Cierre informativo directo</div>
+      </button>
+      <button class="hook-card" onclick="igSelectCierre(this,'pregunta')">
+        <div class="hook-card-title">Pregunta</div>
+        <div class="hook-card-sub">Invita a comentar</div>
+      </button>
+      <button class="hook-card" onclick="igSelectCierre(this,'cta')">
+        <div class="hook-card-title">Llamada a la acción</div>
+        <div class="hook-card-sub">Link en bio o escríbenos</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Guión completo</div>
+    <div class="card">
+      <div id="ig-preview">
+        <span class="output-placeholder">Rellena los campos para generar el guión</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Checklist antes de grabar</div>
+    <div class="card checklist">
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Guión leído y ensayado en voz alta</div>
+          <div class="check-sub">Al menos 2 veces antes de grabar</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Hook grabado en el exterior o en la entrada</div>
+          <div class="check-sub">Nunca empezar dentro del piso</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Comercial cómodo con el guión</div>
+          <div class="check-sub">Que suene natural, no memorizado</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Tour grabado después del guión</div>
+          <div class="check-sub">Primero el comercial hablando, luego el recorrido</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" />
+        <div>
+          <div class="check-text">Duración objetivo: 30-50 segundos</div>
+          <div class="check-sub">Ensayar el guión con cronómetro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page-' + name).classList.add('active');
+}
+
+// TIKTOK
+let ttHook = null;
+
+const ttHooks = {
+  comercial: () => {
+    const tipo = v('tt-tipo') || '[tipo]';
+    const zona = v('tt-zona') || '[zona]';
+    const precio = v('tt-precio') || '[precio]';
+    return `"${tipo} en ${zona}, ${precio}. Si me dijeran que tengo que comprar mañana, compraría este." — cara a cámara, en el exterior, antes de entrar.`;
+  },
+  objeto: () => `Plano cerrado de las llaves cayendo sobre una superficie. Sin cara, sin voz. Solo el sonido + texto en pantalla con precio y zona.`,
+  contraste: () => {
+    const zona = v('tt-zona') || '[zona]';
+    return `Plano del exterior del edificio en ${zona || 'la zona'} (3 seg) → corte seco al interior. Sin transición suavizada. El contraste habla solo.`;
+  },
+  movimiento: () => {
+    const detalle = v('tt-detalle') || '[detalle estrella]';
+    return `Zoom muy cerrado en ${detalle} → zoom out rápido para revelar el espacio completo. Sin voz, solo música.`;
+  }
+};
+
+function ttSelectHook(el, type) {
+  document.querySelectorAll('#page-tiktok .hook-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  ttHook = type;
+  document.getElementById('tt-hook-output').innerHTML = ttHooks[type]();
+}
+
+function ttUpdate() {
+  const tipo = v('tt-tipo');
+  const zona = v('tt-zona');
+  const precio = v('tt-precio');
+  const detalle = v('tt-detalle');
+
+  set('tt-tp1', (tipo && zona) ? tipo + ' en ' + zona : null);
+  set('tt-tp2', detalle || null);
+  set('tt-tp3', (precio && zona) ? precio + ' · ' + zona + ' · Link en bio' : null);
+
+  if (ttHook) document.getElementById('tt-hook-output').innerHTML = ttHooks[ttHook]();
+}
+
+// INSTAGRAM
+let igHook = null;
+let igCierre = null;
+
+const igHooks = {
+  precio: () => {
+    const tipo = v('ig-tipo') || '[tipo]';
+    const zona = v('ig-zona') || '[zona]';
+    const precio = v('ig-precio') || '[precio]';
+    return `"${tipo} en ${zona}, ${precio}. Si me dijeran que tengo que comprar un piso mañana, compraría este."`;
+  },
+  opinion: () => {
+    const tipo = v('ig-tipo') || '[tipo]';
+    return `"Si tuviera que describir mi ${tipo} ideal, sería exactamente como este."`;
+  },
+  sorpresa: () => {
+    const detalle = v('ig-detalle') || '[detalle]';
+    return `"Llevo años vendiendo pisos y ${detalle} como este no lo había visto antes."`;
+  },
+  urgencia: () => {
+    const tipo = v('ig-tipo') || '[tipo]';
+    const zona = v('ig-zona') || '[zona]';
+    return `"Este ${tipo} en ${zona} lleva pocos días publicado y ya hay visitas pedidas. Te lo enseño antes de que desaparezca."`;
+  }
+};
+
+const igCierres = {
+  zona: () => {
+    const precio = v('ig-precio') || '[precio]';
+    const zona = v('ig-zona') || '[zona]';
+    return `Todo esto por ${precio} en ${zona}.`;
+  },
+  pregunta: () => `¿Lo comprarías? Cuéntamelo en los comentarios.`,
+  cta: () => `Si quieres verlo, tienes toda la información en el link de la bio o escríbenos directamente.`
+};
+
+function igSelectHook(el, type) {
+  document.querySelectorAll('#page-insta .hook-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  igHook = type;
+  document.getElementById('ig-hook-output').innerHTML = '"' + igHooks[type]().replace(/^"|"$/g,'') + '"';
+  igUpdate();
+}
+
+function igSelectCierre(el, type) {
+  document.querySelectorAll('#page-insta .hook-card').forEach(c => {
+    if (c.onclick && c.onclick.toString().includes('igSelectCierre')) c.classList.remove('active');
+  });
+  el.classList.add('active');
+  igCierre = type;
+  igUpdate();
+}
+
+function igUpdate() {
+  if (igHook) {
+    document.getElementById('ig-hook-output').innerHTML = igHooks[igHook]();
+  }
+
+  const emocion = v('ig-emocion');
+  const caract = v('ig-caract');
+  const extras = v('ig-extras');
+  const precio = v('ig-precio');
+  const zona = v('ig-zona');
+
+  if (!igHook && !emocion && !caract) {
+    document.getElementById('ig-preview').innerHTML = '<span class="output-placeholder">Rellena los campos para generar el guión</span>';
+    return;
+  }
+
+  let html = '';
+
+  if (igHook) {
+    html += `<div class="preview-part"><div class="preview-tag amber">Hook — apertura</div><div class="preview-text">${igHooks[igHook]()}</div></div>`;
+  }
+
+  if (emocion || caract || extras) {
+    html += `<div class="preview-part"><div class="preview-tag blue">Cuerpo</div>`;
+    if (emocion) html += `<div class="preview-text">${emocion}</div>`;
+    if (caract) html += `<div class="preview-text" style="margin-top:6px;">${caract}${extras ? '. ' + extras : '.'}</div>`;
+    html += `</div>`;
+  }
+
+  if (igCierre) {
+    html += `<div class="preview-part"><div class="preview-tag green">Cierre</div><div class="preview-text">${igCierres[igCierre]()}</div></div>`;
+  }
+
+  document.getElementById('ig-preview').innerHTML = html || '<span class="output-placeholder">Rellena los campos para generar el guión</span>';
+}
+
+function v(id) { return document.getElementById(id).value.trim(); }
+function set(id, val) {
+  document.getElementById(id).innerHTML = val
+    ? val
+    : '<span class="tp-empty">—</span>';
+}
+</script>
+</body>
+</html>
